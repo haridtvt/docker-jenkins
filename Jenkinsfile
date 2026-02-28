@@ -26,26 +26,26 @@ pipeline {
             }
         }
 
-    stage("Deploy to Remote Server") {
-        steps {
-            sshagent(['deploy-server-ssh']) {
-                withCredentials([string(credentialsId: 'db-pass-secret', variable: 'DB_PASS')]) {
-                    script {
-                        def remoteHost = "ec2-user@'${APPSERVER}'"
-                        sh "scp -o StrictHostKeyChecking=no docker-compose.yml ${remoteHost}:/home/ec2-user/"
-                        sh """
-                            ssh -o StrictHostKeyChecking=no ${remoteHost} "
-                                export DOCKER_USER=${DOCKER_USER}
-                                export BUILD_TAG=${BUILD_TAG}
-                                export DB_PASS=${DB_PASS}                          
-                                docker-compose down
-                                docker-compose up -d
-                            "
-                        """
+        stage("Deploy to Remote Server") {
+            steps {
+                sshagent(['deploy-server-ssh']) {
+                    withCredentials([string(credentialsId: 'db-pass-secret', variable: 'DB_PASS')]) {
+                        script {
+                            def remoteHost = "ec2-user@'${APPSERVER}'"
+                            sh "scp -o StrictHostKeyChecking=no docker-compose.yml ${remoteHost}:/home/ec2-user/"
+                            sh """
+                                ssh -o StrictHostKeyChecking=no ${remoteHost} "
+                                    export DOCKER_USER=${DOCKER_USER}
+                                    export BUILD_TAG=${BUILD_TAG}
+                                    export DB_PASS=${DB_PASS}                          
+                                    docker-compose down
+                                    docker-compose up -d
+                                "
+                            """
+                        }
                     }
                 }
             }
         }
-    }
     }
 }
