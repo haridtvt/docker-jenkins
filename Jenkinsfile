@@ -4,6 +4,7 @@ pipeline {
         DOCKER_USER = 'haridtvt'
         BUILD_TAG = "v${BUILD_NUMBER}"
         DOCKER_CREDS_ID = 'dockerhub-creds'
+        JENKINS_NODE_COOKIE = 'dontKillMe'
         APPSERVER = '13.213.157.199'
         path = '/var/jenkins_home/workspace/docker-project'
     }
