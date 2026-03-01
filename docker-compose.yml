@@ -39,6 +39,6 @@ networks:
   app-networks:
     driver: bridge
 volumes:
-  mysql-data:
+  mysql_data:
 
 
