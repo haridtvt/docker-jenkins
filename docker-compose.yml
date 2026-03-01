@@ -19,7 +19,7 @@ services:
     environment:
       - DB_HOST=mysql
       - DB_USER=root
-      - DB_PASS=${MYSQL_PWD}
+      - DB_PASS=${DB_PASS}
       - DB_NAME=devops_db
     ports:
       - "5001:5001"
