@@ -29,8 +29,10 @@ pipeline {
                             sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USERNAME --password-stdin'
                             sh "docker build -t ${DOCKER_USER}/app-backend:${BUILD_TAG} ./backend"
                             sh "docker build -t ${DOCKER_USER}/app-frontend:${BUILD_TAG} ./frontend"
+                            sh "docker build -t ${DOCKER_USER}/app-mysql:${BUILD_TAG} ./mysql"
                             sh "docker push ${DOCKER_USER}/app-backend:${BUILD_TAG}"
                             sh "docker push ${DOCKER_USER}/app-frontend:${BUILD_TAG}"
+                            sh "docker push ${DOCKER_USER}/app-mysql:${BUILD_TAG}"
                         }
                     }
                 }

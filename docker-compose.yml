@@ -2,11 +2,10 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql
+    image: ${DOCKER_USER}/app-mysql:${BUILD_TAG}
     container_name: app-mysql
     volumes:
       - mysql_data:/var/lib/mysql:rw
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASS}
       - MYSQL_DATABASE=devops_db
