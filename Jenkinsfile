@@ -41,7 +41,7 @@ pipeline {
                 sshagent(['deploy-server-ssh']) {
                     withCredentials([string(credentialsId:"${DB_CREDS_ID}", variable: 'DB_PASS')]) {
                         script {
-                            def remoteHost = "ec2-user@${APPSERVER}"
+                            def remoteHost = "ubuntu@${APPSERVER}"
                             sh "scp -o StrictHostKeyChecking=no docker-compose.yml ${remoteHost}:/home/ubuntu/"
                             sh """
                                 ssh -o StrictHostKeyChecking=no ${remoteHost} "
