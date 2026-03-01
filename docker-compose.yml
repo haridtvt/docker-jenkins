@@ -28,7 +28,7 @@ services:
     networks:
       - app-networks
   frontend:
-    image: ${DOCKER_USER}/app-backend:${BUILD_TAG}
+    image: ${DOCKER_USER}/app-frontend:${BUILD_TAG}
     container_name: frontend
     ports:
       - "80:80"
