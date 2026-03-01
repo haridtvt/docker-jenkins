@@ -50,7 +50,7 @@ pipeline {
                                     export DOCKER_USER=${DOCKER_USER}
                                     export BUILD_TAG=${BUILD_TAG}
                                     export DB_PASS=${DB_PASS}                          
-                                    docker-compose down
+                                    docker-compose down -v
                                     docker-compose up -d
                                 "
                             """
