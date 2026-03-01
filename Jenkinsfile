@@ -14,13 +14,30 @@ pipeline {
                 checkout scm
             }
         }
-        stage("check path") {
-            steps {
-                script {
-                    sh "ls -la" 
-                }
-            }
-        }
+        // stage('SonarQube Analysis') {
+        //         steps {
+        //             withSonarQubeEnv("${SONAR_SERVER_NAME}") {
+        //                 script {
+        //                     sh "npm install -g sonar-scanner || true" 
+        //                     sh """
+        //                         sonar-scanner \
+        //                         -Dsonar.projectKey=devops-project \
+        //                         -Dsonar.sources=. \
+        //                         -Dsonar.host.url=http://47.130.213.157:9000 \
+        //                         -Dsonar.login=sqa_66f9ae566af90f6e1613baf2b7f67ee93f96bb52
+        //                     """
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        // stage("Quality Gate") {
+        //     steps {
+        //         timeout(time: 60, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         stage("Build and Push") {
             steps {
                 script {
