@@ -42,7 +42,7 @@ pipeline {
                     withCredentials([string(credentialsId:"${DB_CREDS_ID}", variable: 'DB_PASS')]) {
                         script {
                             def remoteHost = "ec2-user@${APPSERVER}"
-                            sh "scp -o StrictHostKeyChecking=no docker-compose.yml ${remoteHost}:/home/ec2-user/"
+                            sh "scp -o StrictHostKeyChecking=no docker-compose.yml ${remoteHost}:/home/ubuntu/"
                             sh """
                                 ssh -o StrictHostKeyChecking=no ${remoteHost} "
                                     export DOCKER_USER=${DOCKER_USER}
