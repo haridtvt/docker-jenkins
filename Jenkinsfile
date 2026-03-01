@@ -39,7 +39,7 @@ pipeline {
         stage("Deploy to Remote Server") {
             steps {
                 sshagent(['deploy-server-ssh']) {
-                    withCredentials([string(credentialsId:"${DB_CREDS_ID}}", variable: 'DB_PASS')]) {
+                    withCredentials([string(credentialsId:"${DB_CREDS_ID}", variable: 'DB_PASS')]) {
                         script {
                             def remoteHost = "ec2-user@${APPSERVER}"
                             sh "scp -o StrictHostKeyChecking=no docker-compose.yml ${remoteHost}:/home/ec2-user/"
