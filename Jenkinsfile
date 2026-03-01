@@ -16,7 +16,6 @@ pipeline {
         stage("Verify Path") {
             steps {
                 script {
-                    sh "pwd" 
                     sh "ls -la" 
                 }
             }
