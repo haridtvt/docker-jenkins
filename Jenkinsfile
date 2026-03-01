@@ -13,7 +13,7 @@ pipeline {
                 checkout scm
             }
         }
-        stage("Verify Path") {
+        stage("check path") {
             steps {
                 script {
                     sh "ls -la" 
