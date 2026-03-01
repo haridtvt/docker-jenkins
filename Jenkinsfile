@@ -21,7 +21,7 @@ pipeline {
                         sh "echo $DOCKER_PASS"
                         sh "echo $PWD"
                         sh "echo ${BUILD_TAG} ${path}"
-                        sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USERNAME --password-stdin"
+                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USERNAME --password-stdin'
                         sh "docker build -t ${DOCKER_USER}/app-backend:${BUILD_TAG} ${path}/backend"
                         sh "docker build -t ${DOCKER_USER}/app-frontend:${BUILD_TAG} ${path}/frontend"
                         sh "docker push ${DOCKER_USER}/app-backend:${BUILD_TAG}"
