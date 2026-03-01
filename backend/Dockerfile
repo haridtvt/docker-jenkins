@@ -4,7 +4,7 @@ USER root
 WORKDIR /opt/application
 
 COPY ./sources/package.json ./
-RUN "npm install --production"
+RUN npm install --production
 
 COPY ./sources ./
 EXPOSE 5001
