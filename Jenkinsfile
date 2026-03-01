@@ -21,15 +21,15 @@ pipeline {
             }
         }
         stage("Build and Push") {
-                    steps {
-                        script {
-                            dir("${WORKSPACE}") { 
-                                withCredentials([usernamePassword(credentialsId:"${DOCKER_CREDS_ID}", passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USERNAME')]){
-                                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USERNAME --password-stdin'
-                                    sh "docker build -t ${DOCKER_USER}/app-backend:${BUILD_TAG} ./backend"
-                                    sh "docker build -t ${DOCKER_USER}/app-frontend:${BUILD_TAG} ./frontend"
-                                    sh "docker push ${DOCKER_USER}/app-backend:${BUILD_TAG}"
-                                    sh "docker push ${DOCKER_USER}/app-frontend:${BUILD_TAG}"
+            steps {
+                script {
+                    dir("${WORKSPACE}") { 
+                        withCredentials([usernamePassword(credentialsId:"${DOCKER_CREDS_ID}", passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USERNAME')]){
+                            sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USERNAME --password-stdin'
+                            sh "docker build -t ${DOCKER_USER}/app-backend:${BUILD_TAG} ./backend"
+                            sh "docker build -t ${DOCKER_USER}/app-frontend:${BUILD_TAG} ./frontend"
+                            sh "docker push ${DOCKER_USER}/app-backend:${BUILD_TAG}"
+                            sh "docker push ${DOCKER_USER}/app-frontend:${BUILD_TAG}"
                         }
                     }
                 }
