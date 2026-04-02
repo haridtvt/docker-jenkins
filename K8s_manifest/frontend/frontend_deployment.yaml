@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-deployment-frontend
+  namespace: test
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: haridtvt/app-frontend:v30
+        ports:
+        - containerPort: 80
+        env:
+          - name: BACKEND_SERVICE
+            value: "application-svc-backend.test.svc.cluster.local"
+          - name: DNS_RESOLVER
+            value: "10.96.0.10"
+#            value: "kube-dns.kube-system.svc.cluster.local"
+        volumeMounts:
+        - name: config-template
+#          mountPath: /etc/nginx/conf.d/
+          mountPath: /etc/nginx/templates/
+      volumes:
+      - name: config-template
+        configMap:
+          name: app-config-map
+          items:
+            - key: default.conf.template
+              path: default.conf.template
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: application-svc-frontend
+  namespace: test
+spec:
+  type: NodePort
+#  type: LoadBalancer
+  selector:
+    app: frontend
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30080

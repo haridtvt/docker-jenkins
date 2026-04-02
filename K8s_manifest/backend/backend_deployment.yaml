@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-deployment-backend
+  namespace: test
+  labels:
+    app: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: haridtvt/app-backend:v30
+        ports:
+        - containerPort: 5001
+        env:
+          - name: DB_HOST
+            value: application-svc-mysql
+          - name: DB_USER
+            value: root
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: app-secret
+                key: mysql_root_password
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: app-config-map
+                key: mysql_database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: test
+  name: application-svc-backend
+  labels:
+    app: backend
+spec:
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001
+  selector:
+    app: backend

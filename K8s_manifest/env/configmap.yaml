@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config-map
+  namespace: test
+data:
+  mysql_database: "devops_db"
