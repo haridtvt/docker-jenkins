@@ -29,6 +29,9 @@ services:
       - app-networks
   frontend:
     image: ${DOCKER_USER}/app-frontend:${BUILD_TAG}
+    environment:
+      - DNS_RESOLVE=${DNS_RESOLVE}
+      - SERVICE_BACKEND=${SERVICE_BACKEND}
     container_name: frontend
     ports:
       - "80:80"
