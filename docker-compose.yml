@@ -8,7 +8,7 @@ services:
       - mysql_data:/var/lib/mysql:rw
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASS}
-      - MYSQL_DATABASE=devops_db
+      - MYSQL_DATABASE=${DB_NAME}
     ports:
       - "3306:3306"
     networks:
@@ -17,10 +17,10 @@ services:
     image: ${DOCKER_USER}/app-backend:${BUILD_TAG}
     container_name: backend
     environment:
-      - DB_HOST=mysql
-      - DB_USER=root
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASS}
-      - DB_NAME=devops_db
+      - DB_NAME=${DB_NAME}
     ports:
       - "5001:5001"
     depends_on:
