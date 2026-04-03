@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    kubernetes.io/change-cause: "Update version image v30"
   name: application-deployment-backend
   namespace: test
   labels:
@@ -17,14 +19,20 @@ spec:
     spec:
       containers:
       - name: backend
-        image: haridtvt/app-backend:v30
+        image: haridtvt/app-backend:v29
         ports:
         - containerPort: 5001
         env:
           - name: DB_HOST
-            value: application-svc-mysql
+            valueFrom:
+              configMapKeyRef:
+                name: app-config-map
+                key: db_host
           - name: DB_USER
-            value: root
+            valueFrom:
+              configMapKeyRef:
+                name: app-config-map
+                key: db_user
           - name: DB_PASS
             valueFrom:
               secretKeyRef:
@@ -34,7 +42,7 @@ spec:
             valueFrom:
               configMapKeyRef:
                 name: app-config-map
-                key: mysql_database
+                key: db_name
 ---
 apiVersion: v1
 kind: Service

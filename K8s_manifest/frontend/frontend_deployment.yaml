@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    kubernetes.io/change-cause: update request, limit resources
   name: application-deployment-frontend
   namespace: test
   labels:
@@ -17,26 +19,27 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: haridtvt/app-frontend:v30
+        image: haridtvt/app-frontend:v31
         ports:
         - containerPort: 80
         env:
-          - name: BACKEND_SERVICE
-            value: "application-svc-backend.test.svc.cluster.local"
-          - name: DNS_RESOLVER
-            value: "10.96.0.10"
-#            value: "kube-dns.kube-system.svc.cluster.local"
-        volumeMounts:
-        - name: config-template
-#          mountPath: /etc/nginx/conf.d/
-          mountPath: /etc/nginx/templates/
-      volumes:
-      - name: config-template
-        configMap:
-          name: app-config-map
-          items:
-            - key: default.conf.template
-              path: default.conf.template
+          - name: DNS_RESOLVE
+            valueFrom:
+              configMapKeyRef:
+                name: app-config-map
+                key: dns_resolve
+          - name: SERVICE_BACKEND
+            valueFrom:
+              configMapKeyRef:
+                name: app-config-map
+                key: service_backend
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "300m"
+            memory: "256Mi"
 ---
 apiVersion: v1
 kind: Service

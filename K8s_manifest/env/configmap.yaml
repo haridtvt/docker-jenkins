@@ -4,4 +4,8 @@ metadata:
   name: app-config-map
   namespace: test
 data:
-  mysql_database: "devops_db"
+  db_name: "devops_db"
+  db_host: "application-svc-mysql.test.svc.cluster.local"
+  db_user: "root"
+  dns_resolve: "10.96.0.10"
+  service_backend: "application-svc-backend.test.svc.cluster.local"
