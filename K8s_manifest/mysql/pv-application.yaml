@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: application-pv1
+  labels:
+    type: local
+spec:
+  storageClassName: app-sc
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/mysql-0"
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: application-pv2
+  labels:
+    type: local
+spec:
+  storageClassName: app-sc
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data/mysql-1"
