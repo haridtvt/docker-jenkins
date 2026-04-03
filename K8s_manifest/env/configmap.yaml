@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: app-config-map
   namespace: test
+  labels:
+    app: config
 data:
   db_name: "devops_db"
   db_host: "application-svc-mysql.test.svc.cluster.local"
