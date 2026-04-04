@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kubernetes.io/change-cause: "Deploying release {{ .Release.Revision }} using Helm"
+    checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+  name: {{ include "helm.BackendName" . }}-backend
+  labels:
+    {{- include "helm.BackendLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.backend.replicasCount }}
+  selector:
+    matchLabels:
+      {{- include "helm.BackendLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.BackendLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: backend
+        imagePullPolicy: {{ .Values.common.image.pullPolicy }}
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.common.image.tag }}"
+        ports:
+        - containerPort: 5001
+        env:
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.common.existingConfigMap }}
+                key: mysql_host
+          - name: DB_USER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.common.existingConfigMap }}
+                key: mysql_user
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.common.existingSecret }}
+                key: mysql_root_password
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.common.existingConfigMap }}
+                key: mysql_database
+        resources:
+          requests:
+            cpu: {{ .Values.common.resource.requests.cpu }}
+            memory: {{ .Values.common.resource.requests.memory }}
+          limits:
+            cpu: {{ .Values.common.resource.limits.cpu }}
+            memory: {{ .Values.common.resource.limits.memory }}

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kubernetes.io/change-cause: "Deploying release {{ .Release.Revision }} using Helm"
+    checksum/config: {{ include (print $.Template.BasePath "/common/configmap.yaml") . | sha256sum }}
+  name: {{ include "helm.FrontendName" . }}-frontend
+  labels:
+    {{- include "helm.FrontendLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.frontend.replicasCount }}
+  selector:
+    matchLabels:
+      {{- include "helm.FrontendLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.FrontendLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: frontend
+        imagePullPolicy: {{ .Values.common.image.pullPolicy }}
+        image: "{{ .Values.frontend.image.repository }}:{{ .Values.common.image.tag }}"
+        ports:
+        - containerPort: 80
+        env:
+          - name: DNS_RESOLVE
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.common.existingConfigMap }}
+                key: dns_resolve
+          - name: SERVICE_BACKEND
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.common.existingConfigMap }}
+                key: service_backend
+        resources:
+          requests:
+            cpu: {{ .Values.common.resource.requests.cpu }}
+            memory: {{ .Values.common.resource.requests.memory }}
+          limits:
+            cpu: {{ .Values.common.resource.limits.cpu }}
+            memory: {{ .Values.common.resource.limits.memory }}

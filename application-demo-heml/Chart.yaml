@@ -1,0 +1,21 @@
+apiVersion: v2
+name: application
+description: "Cloud Native DevSecOps project with MySQL, Backend, and Frontend"
+
+type: application
+
+version: 0.1.0
+
+appVersion: "v31"
+
+keywords:
+  - kubernetes
+  - mysql
+  - devsecops
+  - hcmc-lab
+
+maintainers:
+  - name: Tran Van Hai
+    email: tranvanhaidtvt@gmail.com
+
+icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.png

@@ -1,0 +1,14 @@
+1. Check status application
+   kubectl get all -n {{ .Release.Namespace }}"
+
+2. Access Apllication:
+{{- if .Values.frontend.enabled }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "helm.FrontendServiceName" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo "Visit: http://$NODE_IP:$NODE_PORT"
+{{- else }}
+ Frontend (disabled).
+{{- end }}
+
+3. Check log
+   kubectl logs -n {{ .Release.Namespace }} -l "app=be,tier=backend"

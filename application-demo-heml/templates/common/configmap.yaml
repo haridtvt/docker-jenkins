@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.common.existingConfigMap }}
+  labels:
+    {{- include "helm.LabelsconfigMap" . | nindent 4 }}
+data:
+  mysql_database: {{ .Values.mysql.mysql_database | quote }}
+  mysql_user: {{ .Values.mysql.mysql_user | quote }}
+  mysql_host: {{ include "helm.MysqlHost" . | quote }}
+  service_backend: {{ include "helm.BackendHost" . | quote }}
+  dns_resolve: {{ .Values.common.dnsResolve | default "10.96.0.10" | quote }}

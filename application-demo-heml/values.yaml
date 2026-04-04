@@ -1,0 +1,74 @@
+# Default values for application-demo-heml.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+common:
+  image:
+    pullPolicy: IfNotPresent
+    tag: "v31"
+  dnsResolve: "10.96.0.10"
+  existingSecret: "application-secrets"
+  existingConfigMap: "application-configmap"
+
+  persistence:
+    name: application-pv1
+    accessModes: "ReadWriteOnce"
+    storageClass: "application-sc"
+    size: 5Gi
+  resource:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+mysql:
+  enabled: true
+  replicasCount: 1
+  image:
+    repository: haridtvt/app-mysql
+    tag: "v31"
+
+  service:
+    type: ClusterIP
+    port: 3306
+  mysql_database: "devops_db"
+  mysql_user: "root"
+
+backend:
+  enabled: true
+  replicasCount: 3
+  image:
+    repository: haridtvt/app-backend
+
+  resource:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  service:
+    type: ClusterIP
+    port: 5001
+
+frontend:
+  enabled: true
+  replicasCount: 3
+  image:
+    repository: haridtvt/app-frontend
+
+  resource:
+    requests:
+      cpu: "200m"
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+  service:
+    type: NodePort
+    port: 80
+    nodeport: 30080
+
+

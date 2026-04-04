@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "helm.PvName" . }}
+  labels:
+    {{- include "helm.PvNameLabels" . | nindent 4 }}
+spec:
+  storageClassName: {{ .Values.common.persistence.storageClass }}
+  capacity:
+    storage: {{ .Values.common.persistence.size }}
+  accessModes:
+    - {{ .Values.common.persistence.accessModes }}
+  hostPath:
+    path: "/mnt/data/mysql-0"

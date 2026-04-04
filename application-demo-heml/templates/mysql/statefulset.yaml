@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "helm.MysqlName" . }}-mysql
+spec:
+  replicas: {{ .Values.mysql.replicasCount }}
+  serviceName: {{ include "helm.MysqlServiceName" . }}-mysql
+  selector:
+    matchLabels:
+      {{- include "helm.MysqlLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm.MysqlLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: mysql
+          imagePullPolicy: {{ .Values.common.image.pullPolicy }}
+          image: "{{ .Values.mysql.image.repository }}:{{ .Values.common.image.tag }}"
+          ports:
+          - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.common.existingSecret }}
+                  key: mysql_root_password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Values.common.existingConfigMap }}
+                  key: mysql_database
+          volumeMounts:
+          - name: mysql
+            mountPath: /var/lib/mysql
+          resources:
+            requests:
+              cpu: {{ .Values.common.resource.requests.cpu }}
+              memory: {{ .Values.common.resource.requests.memory }}
+            limits:
+              cpu: {{ .Values.common.resource.limits.cpu }}
+              memory: {{ .Values.common.resource.limits.memory }}
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql
+    spec:
+      accessModes: [{{ .Values.common.persistence.accessModes | default (list "ReadWriteOnce") }}]
+      storageClassName: {{ .Values.common.persistence.storageClass | quote }}
+      resources:
+        requests:
+          storage: {{ .Values.common.persistence.size }}
